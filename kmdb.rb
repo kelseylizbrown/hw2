@@ -78,18 +78,70 @@
 # Delete existing data, so you'll start fresh each time this script is run.
 # Use `Model.destroy_all` code.
 # TODO!
+# 
+Role.destroy_all
+Movie.destroy_all
+Actor.destroy_all
+Agent.destroy_all
+Studio.destroy_all
 
 # Generate models and tables, according to the domain model.
 # TODO!
+# 
+
 
 # Insert data into the database that reflects the sample data shown above.
 # Do not use hard-coded foreign key IDs.
 # TODO!
+# 
+warner = Studio.create(name: "Warner Bros.")
+
+batman1 = Movie.create(title: "Batman Begins", year_released: 2005, rated: "PG-13", studio_id: warner.id)
+batman2 = Movie.create(title: "The Dark Knight", year_released: 2008, rated: "PG-13", studio_id: warner.id)
+batman3 = Movie.create(title: "The Dark Knight Rises", year_released: 2012, rated: "PG-13", studio_id: warner.id)
+
+agent = Agent.create(name: "Ari Emanuel")
+
+bale = Actor.create(name: "Christian Bale", agent_id: agent.id)
+caine = Actor.create(name: "Michael Caine")
+neeson = Actor.create(name: "Liam Neeson")
+holmes = Actor.create(name: "Katie Holmes")
+oldman = Actor.create(name: "Gary Oldman")
+ledger = Actor.create(name: "Heath Ledger")
+eckhart = Actor.create(name: "Aaron Eckhart")
+gyllenhaal = Actor.create(name: "Maggie Gyllenhaal")
+hardy = Actor.create(name: "Tom Hardy")
+gordonlevitt = Actor.create(name: "Joseph Gordon-Levitt")
+hathaway = Actor.create(name: "Anne Hathaway")
+
+Role.create(movie_id: batman1.id, actor_id: bale.id, character_name: "Bruce Wayne")
+Role.create(movie_id: batman1.id, actor_id: caine.id, character_name: "Alfred")
+Role.create(movie_id: batman1.id, actor_id: neeson.id, character_name: "Ra's Al Ghul")
+Role.create(movie_id: batman1.id, actor_id: holmes.id, character_name: "Rachel Dawes")
+Role.create(movie_id: batman1.id, actor_id: oldman.id, character_name: "Commissioner Gordon")
+
+Role.create(movie_id: batman2.id, actor_id: bale.id, character_name: "Bruce Wayne")
+Role.create(movie_id: batman2.id, actor_id: ledger.id, character_name: "Joker")
+Role.create(movie_id: batman2.id, actor_id: eckhart.id, character_name: "Harvey Dent")
+Role.create(movie_id: batman2.id, actor_id: caine.id, character_name: "Alfred")
+Role.create(movie_id: batman2.id, actor_id: gyllenhaal.id, character_name: "Rachel Dawes")
+
+Role.create(movie_id: batman3.id, actor_id: bale.id, character_name: "Bruce Wayne")
+Role.create(movie_id: batman3.id, actor_id: oldman.id, character_name: "Commissioner Gordon")
+Role.create(movie_id: batman3.id, actor_id: hardy.id, character_name: "Bane")
+Role.create(movie_id: batman3.id, actor_id: gordonlevitt.id, character_name: "John Blake")
+Role.create(movie_id: batman3.id, actor_id: hathaway.id, character_name: "Selina Kyle")
 
 # Prints a header for the movies output
 puts "Movies"
 puts "======"
 puts ""
+
+movies = Movie.all
+for movie in movies
+  studio = Studio.find(movie.studio_id)
+  puts "#{movie.title} #{movie.year_released} #{movie.rated} #{studio.name}"
+end
 
 # Query the movies data and loop through the results to display the movies output.
 # TODO!
@@ -100,6 +152,13 @@ puts "Top Cast"
 puts "========"
 puts ""
 
+roles = Role.all
+for role in roles
+  movie = Movie.find(role.movie_id)
+  actor = Actor.find(role.actor_id)
+  puts "#{movie.title} #{actor.name} #{role.character_name}"
+end
+
 # Query the cast data and loop through the results to display the cast output for each movie.
 # TODO!
 
@@ -108,6 +167,11 @@ puts ""
 puts "Represented by agent"
 puts "===================="
 puts ""
+
+actors = Actor.where.not(agent_id: nil)
+for actor in actors
+  puts "#{actor.name}"
+end
 
 # Query the actor data and loop through the results to display the agent's list of represented actors output.
 # TODO!
